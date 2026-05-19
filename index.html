@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Museum of Us</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+  <style>
+    /* ─────────────────────────────────────────
+   FONTS
+   PPWoodland is loaded from your fonts/ folder.
+   Momo Signature: add MomoSignature.otf (or
+   whatever the exact filename is) to fonts/.
+   Pinyon Script is the Google Fonts fallback.
+───────────────────────────────────────── */
+
+    @font-face {
+      font-family: 'PPWoodland';
+      src: url('fonts/PPWoodland-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'PPWoodland';
+      src: url('fonts/PPWoodland-Ultralight.otf') format('opentype');
+      font-weight: 200;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'MomoSignature';
+      src: url('fonts/MomoSignature.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+    :root {
+      --pink: #FCC5D3;
+      --dusty: #E5D4D8;
+      --sage: #B6DD8E;
+      --sage-light: #CAE4AC;
+      --cream: #FDF8F5;
+      --paper: #FFFCFA;
+      --dark: #231018;
+      --mid: #614050;
+      --muted: #9C7080;
+      --wood: 'PPWoodland', Georgia, serif;
+      --sig: 'MomoSignature', 'Pinyon Script', cursive;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ::selection {
+      background: var(--pink);
+      color: var(--dark);
+    }
+
+    ::-moz-selection {
+      background: var(--pink);
+      color: var(--dark);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: var(--wood);
+      font-weight: 200;
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 900;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.1rem 2rem;
+      background: rgba(253, 248, 245, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(252, 197, 211, 0.35);
+    }
+
+    nav a {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.72rem;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--dark);
+    }
+
+    .nav-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--pink);
+      display: inline-block;
+      opacity: 0.8;
+    }
+
+    /* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 9rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(155deg, #FDF0F5 0%, #FDF8F5 55%, #F3F8ED 100%);
+    }
+
+    .hero-eyebrow {
+      font-family: var(--sig);
+      font-size: 2rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 1.25rem;
+      opacity: 0.85;
+      animation: fadeUp 1s ease both;
+    }
+
+    .hero-title {
+      font-family: var(--wood);
+      font-weight: 700;
+      font-size: clamp(5rem, 14vw, 12rem);
+      line-height: 0.88;
+      color: var(--dark);
+      letter-spacing: -3px;
+      animation: fadeUp 1s 0.1s ease both;
+    }
+
+    .hero-title .tinted {
+      color: var(--pink);
+    }
+
+    .hero-sub {
+      font-family: var(--sig);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      color: var(--mid);
+      margin-top: 1.5rem;
+      line-height: 1.3;
+      animation: fadeUp 1s 0.2s ease both;
+    }
+
+    .hero-detail {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.72rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 2rem;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    /* graphics injected here by JS */
+    .hero-graphic {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+
+    .scroll-indicator span {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.6rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, var(--pink), transparent);
+    }
+
+    @keyframes scrollPulse {
+
+      0%,
+      100% {
+        opacity: 0.35;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: translateX(-50%) translateY(5px);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ─────────────────────────────────────────
+   DIVIDERS
+───────────────────────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2.5rem 5vw;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--dusty), transparent);
+    }
+
+    .divider-mark {
+      font-family: var(--sig);
+      font-size: 2.2rem;
+      color: var(--dusty);
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* ─────────────────────────────────────────
+   SECTION COMMONS
+───────────────────────────────────────── */
+    .section-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 5vw;
+    }
+
+    .section-label {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: var(--wood);
+      font-weight: 700;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      line-height: 0.95;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title em {
+      font-style: italic;
+      font-weight: 200;
+      color: var(--mid);
+    }
+
+    /* ─────────────────────────────────────────
+   GALLERY
+───────────────────────────────────────── */
+    .gallery-section {
+      padding: 4rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gallery-header {
+      padding: 0 5vw;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Masonry — images keep original proportions */
+    .masonry {
+      columns: 5 200px;
+      column-gap: 8px;
+      padding: 0 5vw;
+    }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 8px;
+      display: block;
+      position: relative;
+    }
+
+    .masonry-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Polaroid style (applied to every ~4th image) */
+    .masonry-item.is-polaroid {
+      background: white;
+      padding: 8px 8px 36px;
+      box-shadow: 0 3px 18px rgba(35, 16, 24, 0.09);
+    }
+
+    .masonry-item.is-polaroid img {
+      display: block;
+    }
+
+    .polaroid-label {
+      font-family: var(--sig);
+      font-size: 1.05rem;
+      color: var(--mid);
+      text-align: center;
+      position: absolute;
+      bottom: 6px;
+      left: 8px;
+      right: 8px;
+      outline: none;
+      cursor: text;
+    }
+
+    /* Rotation variants */
+    .rot-l1 {
+      transform: rotate(-1.8deg);
+    }
+
+    .rot-r1 {
+      transform: rotate(1.6deg);
+    }
+
+    .rot-l2 {
+      transform: rotate(-0.7deg);
+    }
+
+    .rot-r2 {
+      transform: rotate(0.9deg);
+    }
+
+    .rot-0 {
+      transform: rotate(0deg);
+    }
+
+    /* ─────────────────────────────────────────
+   MEMORIES SECTION
+───────────────────────────────────────── */
+    .memories-section {
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(140deg,
+          rgba(252, 197, 211, 0.18) 0%,
+          rgba(253, 248, 245, 1) 40%,
+          rgba(202, 228, 172, 0.18) 100%);
+    }
+
+    .memories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.25rem;
+      padding: 0 5vw;
+      margin-top: 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .memory-card {
+      background: var(--paper);
+      border-radius: 2px;
+      padding: 2rem 1.75rem 1.75rem;
+      position: relative;
+      box-shadow: 0 2px 14px rgba(35, 16, 24, 0.06);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: all 0.6s ease;
+    }
+
+    .memory-card.vis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* top accent line per color */
+    .memory-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .mc-pink::before {
+      background: var(--pink);
+    }
+
+    .mc-sage::before {
+      background: var(--sage);
+    }
+
+    .mc-dusty::before {
+      background: var(--dusty);
+    }
+
+    .mc-lsage::before {
+      background: var(--sage-light);
+    }
+
+    .mem-label {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.85rem;
+    }
+
+    .mem-quote {
+      font-family: var(--sig);
+      font-size: 1.9rem;
+      color: var(--dark);
+      line-height: 1.3;
+      margin-bottom: 0.7rem;
+    }
+
+    .mem-note {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.82rem;
+      color: var(--mid);
+      line-height: 1.8;
+    }
+
+    /* Scattered quote between sections */
+    .pull-quote {
+      text-align: center;
+      padding: 4rem 5vw;
+      position: relative;
+    }
+
+    .pull-quote-text {
+      font-family: var(--sig);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: var(--mid);
+      line-height: 1.35;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .pull-quote-text .pink {
+      color: var(--pink);
+    }
+
+    .pull-quote-text .sage {
+      color: var(--sage);
+    }
+
+    /* ─────────────────────────────────────────
+   ABOUT HER — TRAIT PILLS
+───────────────────────────────────────── */
+    .traits-section {
+      padding: 4.5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .traits-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 2rem;
+    }
+
+    .trait-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0.65rem 1.4rem;
+      border-radius: 50px;
+      border: 1px solid var(--dusty);
+      background: white;
+      transition: all 0.2s ease;
+      cursor: default;
+    }
+
+    .trait-pill:hover {
+      background: var(--pink);
+      border-color: var(--pink);
+      transform: translateY(-2px);
+    }
+
+    .trait-pill:nth-child(3n+2) {
+      border-color: var(--sage-light);
+    }
+
+    .trait-pill:nth-child(3n+2):hover {
+      background: var(--sage-light);
+      border-color: var(--sage-light);
+    }
+
+    .trait-pill:nth-child(3n+3) {
+      border-color: var(--dusty);
+    }
+
+    .tp-emoji {
+      font-size: 1rem;
+    }
+
+    .tp-text {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.82rem;
+      color: var(--dark);
+      letter-spacing: 0.5px;
+    }
+
+    /* ─────────────────────────────────────────
+   LETTERS
+───────────────────────────────────────── */
+    .letters-section {
+      padding: 5rem 0;
+      background: linear-gradient(170deg,
+          rgba(229, 212, 216, 0.25) 0%,
+          rgba(253, 248, 245, 1) 40%,
+          rgba(202, 228, 172, 0.15) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .letters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .letter-card {
+      background: var(--paper);
+      box-shadow: 0 8px 48px rgba(35, 16, 24, 0.08), 0 1px 4px rgba(35, 16, 24, 0.04);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: all 0.7s ease;
+    }
+
+    .letter-card.vis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-card:nth-child(1) {
+      transform: translateY(22px) rotate(-0.6deg);
+    }
+
+    .letter-card:nth-child(1).vis {
+      transform: translateY(0) rotate(-0.6deg);
+    }
+
+    .letter-card:nth-child(2) {
+      transform: translateY(22px) rotate(0.5deg);
+    }
+
+    .letter-card:nth-child(2).vis {
+      transform: translateY(0) rotate(0.5deg);
+    }
+
+    /* wax-seal strip at top */
+    .letter-header {
+      padding: 1.1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lh-pink {
+      background: var(--pink);
+    }
+
+    .lh-sage {
+      background: var(--sage-light);
+    }
+
+    .lh-dusty {
+      background: var(--dusty);
+    }
+
+    .letter-from-label {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.65rem;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--dark);
+      opacity: 0.65;
+    }
+
+    .letter-seal {
+      font-size: 1.5rem;
+    }
+
+    .letter-body-pad {
+      padding: 2.5rem 2.5rem 2rem;
+    }
+
+    .letter-salutation {
+      font-family: var(--sig);
+      font-size: 2.6rem;
+      color: var(--dark);
+      display: block;
+      margin-bottom: 1.5rem;
+      line-height: 1;
+    }
+
+    .letter-textarea {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.92rem;
+      line-height: 2;
+      color: var(--dark);
+      width: 100%;
+      border: none;
+      border-bottom: 1px dashed rgba(182, 221, 142, 0.6);
+      outline: none;
+      resize: none;
+      min-height: 260px;
+      background: transparent;
+    }
+
+    .letter-textarea::placeholder {
+      color: rgba(97, 64, 80, 0.28);
+      font-style: italic;
+    }
+
+    .letter-sig {
+      font-family: var(--sig);
+      font-size: 2.1rem;
+      color: var(--mid);
+      display: block;
+      text-align: right;
+      margin-top: 1.5rem;
+      outline: none;
+      cursor: text;
+    }
+
+    .letter-hint {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.6rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.4;
+      text-align: center;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(252, 197, 211, 0.25);
+      margin-top: 1.25rem;
+    }
+
+    /* Letter placeholders for future letters */
+    .letter-placeholder {
+      border: 1.5px dashed var(--dusty);
+      background: rgba(229, 212, 216, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      gap: 0.75rem;
+      opacity: 0.55;
+    }
+
+    .letter-placeholder .lp-icon {
+      font-size: 2.5rem;
+      opacity: 0.35;
+    }
+
+    .letter-placeholder .lp-text {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .letter-stamp {
+      width: 90px;
+      display: block;
+      margin-left: auto;
+      margin-right: 15px;
+      margin-top: -10px;
+      transform: rotate(-8deg);
+      opacity: 0.85;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ─────────────────────────────────────────
+   SCATTERED GRAPHICS  (injected by JS)
+───────────────────────────────────────── */
+    .gfx {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+      z-index: 2;
+    }
+
+    /* ─────────────────────────────────────────
+   CLOSING
+───────────────────────────────────────── */
+    .closing {
+      padding: 6rem 5vw 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(170deg, #FDF0F5 0%, #F3F8ED 100%);
+    }
+
+    .closing-script {
+      font-family: var(--sig);
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      color: var(--dark);
+      line-height: 1.2;
+      display: block;
+      margin-bottom: 2rem;
+    }
+
+    .closing-body {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.95rem;
+      line-height: 2.1;
+      color: var(--mid);
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .closing-names {
+      font-family: var(--sig);
+      font-size: 2.8rem;
+      color: var(--mid);
+      display: block;
+      margin-bottom: 2rem;
+    }
+
+    .closing-footer {
+      font-family: var(--wood);
+      font-weight: 200;
+      font-size: 0.62rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.45;
+    }
+
+    /* ─────────────────────────────────────────
+   FADE-IN UTILITY
+───────────────────────────────────────── */
+    .fi {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fi.vis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .masonry {
+        columns: 3 160px;
+      }
+
+      .letters-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .masonry {
+        columns: 2 130px;
+      }
+
+      nav {
+        gap: 1.2rem;
+        padding: 0.9rem 1rem;
+      }
+
+      nav a {
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+      }
+
+      .nav-dot {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ╔══════════════════════════════════════╗
+     ║              NAVIGATION              ║
+     ╚══════════════════════════════════════╝ -->
+  <nav>
+    <a href="#gallery">Gallery</a>
+    <span class="nav-dot"></span>
+    <a href="#memories">Memories</a>
+    <span class="nav-dot"></span>
+    <a href="#letters">Letters</a>
+    <span class="nav-dot"></span>
+    <a href="#closing">Forever</a>
+  </nav>
+
+  <!-- ╔══════════════════════════════════════╗
+     ║               HERO                   ║
+     ╚══════════════════════════════════════╝ -->
+  <section class="hero" id="home">
+    <span class="hero-eyebrow">a museum of</span>
+    <h1 class="hero-title">Nine<br><span class="tinted">Years</span></h1>
+    <p class="hero-sub">of the most beautiful friendship</p>
+    <div class="scroll-indicator">
+      <span>scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ───────── DIVIDER ───────── -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-mark">🎀</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════╗
+     ║              GALLERY                 ║
+     ╚══════════════════════════════════════╝ -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+      <div class="fi">
+        <span class="section-label">Wing I — The Gallery</span>
+        <h2 class="section-title">Our <em>Story</em> in Pictures</h2>
+      </div>
+    </div>
+
+    <!-- All pics + aesthetic images, shuffled by JS -->
+    <div class="masonry" id="galleryGrid"></div>
+  </section>
+
+  <!-- ───────── PULL QUOTE ───────── -->
+  <div class="pull-quote">
+    <p class="pull-quote-text fi">
+      "True friendship is never measured by how often you talk, but by how naturally you find your way back to each
+      other no matter how much time passes."
+    </p>
+  </div>
+
+  <!-- ───────── DIVIDER ───────── -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-mark">✿</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════╗
+     ║           MEMORY SNIPPETS            ║
+     ╚══════════════════════════════════════╝ -->
+  <section class="memories-section" id="memories">
+    <div class="section-inner">
+      <div class="fi">
+        <span class="section-label">Wing II — The Memory Vault</span>
+        <h2 class="section-title">Remember <em>When</em></h2>
+      </div>
+    </div>
+
+    <div class="memories-grid">
+
+      <div class="memory-card mc-pink">
+        <span class="mem-label">Birthdays</span>
+        <p class="mem-quote">Our 13th Birthday</p>
+        <p class="mem-note">I remember you were the only one from our class who showed up, and you even brought Rama and
+          Yumna with you. Mesk was still a little baby back then. My hair was super curly, and it was the first time we
+          ever wore makeup. It was also the first and only time we hosted a birthday party.</p>
+      </div>
+
+      <div class="memory-card mc-sage">
+        <span class="mem-label">Birthdays</span>
+        <p class="mem-quote">Your 14th Birthday</p>
+        <p class="mem-note">Rama planned a whole surprise party for you and asked all of us to reject your invitation so
+          we could surprise you instead. I remember Malak and I showing up extra early and calling Rama to come open the
+          door for us. Later, you told us you saw us from the window and thought we were Indians.</p>
+      </div>
+
+      <div class="memory-card mc-dusty">
+        <span class="mem-label">Birthdays</span>
+        <p class="mem-quote">Our Shared Celebration</p>
+        <p class="mem-note">It’s extra fun sharing a birth month. We finally made it work when we went out together in
+          October to celebrate our birthdays with a pistachio milk cake. We asked the lady to write “MLM” on it, only to
+          later find out it’s actually a cigarette brand.</p>
+      </div>
+
+      <div class="memory-card mc-lsage">
+        <span class="mem-label">Eid</span>
+        <p class="mem-quote">Wrong Guests</p>
+        <p class="mem-note">We asked if you’d be home so we could drop off the meat, but your dad was actually expecting
+          other guests. We remember sitting in the car while another car parked right behind us. When we got out, they
+          got out too, but it never crossed our minds that they might be your guests. When we knocked, your father and
+          all your brothers opened the door, and we had the most awkward staring contest ever until Rama came and said,
+          “Oh, it’s Malak and Mariam, let them in.”</p>
+      </div>
+
+      <div class="memory-card mc-pink">
+        <span class="mem-label">Eid</span>
+        <p class="mem-quote">2ara2eesh</p>
+        <p class="mem-note">During Eid season, all the sweet biscuits usually disappear first, and the only thing left
+          is always the 2ara2eesh. Mama would usually pack some for us to take to school just so we could finish them.
+          When Teta made them at home, she would make around 5–10 kilos. We still remember introducing you to them for
+          the first time and how much you loved them. Now we associate them with you, and every Eid it feels like a
+          tradition that we have to save some for you.</p>
+      </div>
+
+      <div class="memory-card mc-sage">
+        <span class="mem-label">School</span>
+        <p class="mem-quote">7arankash</p>
+        <p class="mem-note">I’m not even sure if you remember this, but one time you had golden berries with you at
+          school and offered me some. You called them golden berries, and I told you they’re called 7arankash. You found
+          the name so funny and kept repeating it the whole time.</p>
+      </div>
+
+      <div class="memory-card mc-dusty">
+        <span class="mem-label">School</span>
+        <p class="mem-quote">Yumna</p>
+        <p class="mem-note">I remember when Rama was still in high school. Malak and I would go there after classes
+          every day to wait for Mama, and Yumna would always be under the stairs waiting for Rama too. We would play
+          with her, carry her around, and spin her. She was so tiny back then.</p>
+      </div>
+
+      <div class="memory-card mc-lsage">
+        <span class="mem-label">Hangouts</span>
+        <p class="mem-quote">Safa Park</p>
+        <p class="mem-note">This is funny, but there was a time when my family used to go to Safa Park every Saturday.
+          For some reason, everyone narrated their entire lives on the class group chat, so people somehow knew that.
+          One time you texted me saying you were at Safa Park, and I just replied with “enjoy.” I knew you were hinting
+          that we should meet up, but I also knew there was no chance we were going because it wasn’t a Saturday.</p>
+      </div>
+
+      <div class="memory-card mc-pink">
+        <span class="mem-label">Hangouts</span>
+        <p class="mem-quote">Our First</p>
+        <p class="mem-note">At that time, you always talked about how your mom encouraged you to hang out with people
+          and didn’t focus too much on how long you stayed out. One day you said you were at the mall while your sisters
+          were with their friends and you were alone, so Malak and I told you we could come. Aladdin had just come out
+          at the time, and there was a huge cinema display everyone was taking pictures with. We kept trying to convince
+          you to take pictures with us, but you refused. It was one of the many times we embarrassed you during our
+          hangouts.</p>
+      </div>
+
+      <div class="memory-card mc-sage">
+        <span class="mem-label">Your House</span>
+        <p class="mem-quote">Trampoline</p>
+        <p class="mem-note">Honestly, one of our favorite things about your house is the trampoline. We remember jumping
+          on it during your birthday and another time when we came over right after school. I was still in my uniform
+          and felt so hot that I took off my PE shirt, and you gave me one of your jackets to wear.</p>
+      </div>
+
+      <div class="memory-card mc-dusty">
+        <span class="mem-label">Hangouts</span>
+        <p class="mem-quote">Our Mall</p>
+        <p class="mem-note">We went to Circle Mall when it had just opened, and we even rode around in the Nesto cart.
+          It’s probably the mall we visited the most, especially during COVID times. We would always play in the arcade,
+          then go sit at a café and open the toys we bought with our tickets. We even got matching shirts from Cotton On
+          there once. And we can’t forget the time we got scammed into buying blue tea from that Chinese place that
+          later closed down. We really have so many memories in that mall.</p>
+      </div>
+
+      <div class="memory-card mc-lsage">
+        <span class="mem-label">Souvenirs</span>
+        <p class="mem-quote">Your Cool Travels</p>
+        <p class="mem-note">I remember that even before we became super close, you brought us soap from one of your
+          trips. We were so shocked because you were giving gifts to all your close friends, and somehow we were
+          included too. It’s always so fun when you bring us souvenirs from your travels. I still remember the brass
+          tortoise you got for Myrtle. It was so thoughtful. Your gifts are always unique and fun to explore, whether
+          it’s the rock that looks cool on the inside or the painted wooden piece. That’s why our number one mission in
+          Egypt was getting you as many little pieces and souvenirs from our trip as possible.</p>
+      </div>
+
+      <div class="memory-card mc-pink">
+        <span class="mem-label">Car Rides</span>
+        <p class="mem-quote">Our Personal Driver</p>
+        <p class="mem-note">One of the biggest milestones was definitely you learning how to drive. It unlocked a whole
+          new level of feeling grown up. You drove us to so many places, and the car conversations always hit
+          differently. For some reason, all the things I can’t think of during the hangout suddenly come to me in the
+          car, and then I just can’t stop yapping.</p>
+      </div>
+
+      <div class="memory-card mc-sage">
+        <span class="mem-label">Our Taste Tester</span>
+        <p class="mem-quote">Foodie Leen</p>
+        <p class="mem-note">Remember when we made onigiri, stir-fried noodles, and fried rice for you and Yumna when you
+          came over to our house? It’s always so fun having you try the food we make. Your reactions are always so good
+          that they genuinely boost our confidence.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- ╔══════════════════════════════════════╗
+     ║              LETTERS                 ║
+     ╚══════════════════════════════════════╝ -->
+  <section class="letters-section" id="letters">
+    <div class="section-inner">
+      <div class="fi">
+        <span class="section-label">Wing IV — The Letters</span>
+        <h2 class="section-title">Words <em>for you</em></h2>
+        <p
+          style="font-family:var(--wood);font-weight:200;font-size:0.8rem;color:var(--muted);margin-top:0.6rem;letter-spacing:0.5px;">
+          Click inside each letter to write. More letters coming soon.
+        </p>
+      </div>
+
+      <div class="letters-grid">
+
+        <!-- Letter 1: From you -->
+        <div class="letter-card">
+          <div class="letter-header lh-pink">
+            <span class="letter-from-label">a letter from mariam</span>
+            <span class="letter-seal">🌸</span>
+          </div>
+          <div class="letter-body-pad">
+            <span class="letter-salutation">Dear Leen,</span>
+            <textarea class="letter-textarea" style="min-height: 580px;"
+              readonly>Our friendship is truly one of the most amazing things in my life. Sometimes I feel like it should literally be the definition of friendship. It’s built on such solid ground that distance was never something that could break it. We never have to force things to work, they just naturally do.
+
+What I love most is how comfortable everything feels between us, like we’re sisters. It’s never awkward or weird, even if we go months without talking. I love that we stayed this close even after ending up in different universities and completely different majors. We still always find things to yap about, and our friendship has stayed just as strong through every stage of life.
+
+I’m genuinely excited for all the years ahead of us. I’m excited for the day we attend each other’s weddings, for our future kids to become friends, and for our families to hang out together when we’re older. I’m excited for the stories we’ll tell our kids one day, and I hope this friendship lasts long enough for us to tell our grandkids how long we’ve been friends for.
+
+Our friendship is truly something I’m proud of, and I love telling people about my dentist friend Leen. Honestly, I think it’s overrated when people say friends need to go into the same major. I think it’s way cooler that each of us has our own path. I can help you with tech stuff, and you can help me with my teeth :)
+
+Every time Mama and Baba describe you as a good friend and say that finding a true friend in life is a blessing, I feel genuinely happy because I know I really found that kind of friendship with you. Even though we’re in different universities studying different things, we still share our experiences, talk about life, and stay connected no matter what.</textarea>
+            <span class="letter-sig" contenteditable="true" spellcheck="false">mariam ✿</span>
+            <img src="stamp.png" class="letter-stamp" alt="stamp">
+          </div>
+        </div>
+
+        <!-- Letter 2: From sister -->
+        <div class="letter-card">
+          <div class="letter-header lh-sage">
+            <span class="letter-from-label">a letter from your sister</span>
+            <span class="letter-seal">🌿</span>
+          </div>
+          <div class="letter-body-pad">
+            <span class="letter-salutation">To someone very special,</span>
+            <textarea class="letter-textarea" placeholder="Write your sister's letter here...
+
+Her own memories. Her own moments. The things only she would notice and want to say.
+
+What does she treasure most about this friendship?"></textarea>
+            <span class="letter-sig" contenteditable="true" spellcheck="false">your sister's name ✿</span>
+            <img src="stamp.png" class="letter-stamp" alt="stamp">
+            <p class="letter-hint">✎ click anywhere to write</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── DIVIDER ───────── -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-mark">✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════╗
+     ║              CLOSING                 ║
+     ╚══════════════════════════════════════╝ -->
+  <section class="closing" id="closing">
+    <span class="closing-script">
+      nine years &<br>forever more
+    </span>
+    <p class="closing-body">
+      You are not just a friend. You are a whole chapter of our lives — one we would never trade for anything.
+      Through every stage, every city, every exam and every adventure, you have been constant.
+      This museum is small compared to what you deserve, but it is filled with everything we feel.
+    </p>
+    <p class="closing-body" style="font-size:0.85rem;margin-top:-1rem;">
+      Thank you for eating and complimenting our food. For driving us everywhere.
+      For always coming back from your trips with something in your bag for us.
+      For growing up with us. For all the years still ahead.
+    </p>
+    <span class="closing-names">with all our love 🎀</span>
+    <span class="closing-footer">a museum made with love &nbsp;·&nbsp; est. 7th grade</span>
+  </section>
+
+  <!-- ══════════════════════════════════════
+     SCRIPT
+══════════════════════════════════════ -->
+  <script>
+    // ─────────────────────────────────────────────
+    //  CONFIGURATION
+    //  Update file extensions to match your actual
+    //  image files. Common options: .jpg .jpeg .png .webp
+    // ─────────────────────────────────────────────
+    const EXT_PICS = '.jpeg';       // pics/ folder extension
+    const EXT_AES = '.jfif';       // aesthetic/ folder extension
+    const EXT_GFX = '.png';       // graphics/ folder extension (usually png for transparency)
+
+    // ─────────────────────────────────────────────
+    //  BUILD IMAGE LIST
+    // ─────────────────────────────────────────────
+    const picSrcs = Array.from({ length: 17 }, (_, i) =>
+      ({ src: `pics/. (${i + 1})${EXT_PICS}`, folder: 'pics' })
+    );
+    const aesSrcs = Array.from({ length: 12 }, (_, i) =>
+      ({ src: `aesthetic/. (${i + 1})${EXT_AES}`, folder: 'aesthetic' })
+    );
+
+    // Mix all 26 together
+    const allImages = [...picSrcs, ...aesSrcs];
+
+    // Fisher-Yates shuffle for true randomness
+    for (let i = allImages.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allImages[i], allImages[j]] = [allImages[j], allImages[i]];
+    }
+
+    // ─────────────────────────────────────────────
+    //  POPULATE GALLERY
+    // ─────────────────────────────────────────────
+    const rotations = ['rot-l1', 'rot-r1', 'rot-l2', 'rot-r2', 'rot-0', 'rot-0', 'rot-l2', 'rot-r2'];
+    const grid = document.getElementById('galleryGrid');
+
+    allImages.forEach((img, i) => {
+      const isPolaroid = i % 5 === 0 || i % 7 === 0; // every ~5th or 7th gets polaroid treatment
+      const rot = rotations[i % rotations.length];
+
+      const frame = document.createElement('div');
+      frame.className = `masonry-item fi ${rot}${isPolaroid ? ' is-polaroid' : ''}`;
+
+      const image = document.createElement('img');
+      image.src = img.src;
+      image.alt = '';
+      image.loading = 'lazy';
+      frame.appendChild(image);
+
+      if (isPolaroid) {
+        const lbl = document.createElement('div');
+        lbl.className = 'polaroid-label';
+        lbl.contentEditable = 'true';
+        lbl.spellcheck = false;
+        lbl.dataset.placeholder = '✎';
+        frame.appendChild(lbl);
+      }
+
+      grid.appendChild(frame);
+    });
+
+    // ─────────────────────────────────────────────
+    //  SCATTER GRAPHICS across the page
+    // ─────────────────────────────────────────────
+    const gfxCount = 8;
+    const gfxPlacements = [
+      // [selector of parent section, top, left/right, width, rotate, opacity]
+      { el: '.hero', top: '18%', left: '4%', w: '110px', rot: '-14deg', op: 0.9 },
+      { el: '.hero', top: '25%', right: '5%', w: '95px', rot: '10deg', op: 0.85 },
+      { el: '.hero', bottom: 'calc(18% - 40px)', left: '7%', w: '80px', rot: '6deg', op: 0.8 },
+      { el: '.gallery-section', top: '4%', right: '1%', w: '90px', rot: '-6deg', op: 0.75 },
+      { el: '.gallery-section', bottom: '1%', left: '42%', w: '105px', rot: '12deg', op: 0.8 },
+      { el: '.memories-section', bottom: '4%', right: '2%', w: '88px', rot: '-9deg', op: 0.8 },
+      { el: '.letters-section', top: '8%', right: '2%', w: '100px', rot: '7deg', op: 0.75 },
+      { el: '.closing', top: '8%', left: '4%', w: '120px', rot: '-11deg', op: 0.8 },
+    ];
+
+    gfxPlacements.forEach((p, i) => {
+      const section = document.querySelector(p.el);
+      if (!section) return;
+
+      const cs = getComputedStyle(section);
+      if (cs.position === 'static') section.style.position = 'relative';
+
+      const gfx = document.createElement('img');
+      gfx.src = `graphics/. (${i + 1})${EXT_GFX}`;
+      gfx.alt = '';
+      gfx.className = 'gfx';
+
+      Object.assign(gfx.style, {
+        width: p.w,
+        transform: `rotate(${p.rot})`,
+        opacity: String(p.op),
+      });
+      if (p.top) gfx.style.top = p.top;
+      if (p.bottom) gfx.style.bottom = p.bottom;
+      if (p.left) gfx.style.left = p.left;
+      if (p.right) gfx.style.right = p.right;
+
+      section.appendChild(gfx);
+    });
+
+    // ─────────────────────────────────────────────
+    //  SCROLL REVEAL
+    // ─────────────────────────────────────────────
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('vis'), i * 55);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fi, .memory-card, .letter-card').forEach(el => io.observe(el));
+
+    // ─────────────────────────────────────────────
+    //  MOUSE TRAIL
+    // ─────────────────────────────────────────────
+    let lastX = 0;
+    let lastY = 0;
+    document.addEventListener('mousemove', (e) => {
+      const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+      if (dist > 15) {
+        lastX = e.clientX;
+        lastY = e.clientY;
+
+        const flower = document.createElement('div');
+        flower.textContent = '🌸';
+        flower.style.position = 'fixed';
+        flower.style.left = e.clientX + 'px';
+        flower.style.top = e.clientY + 'px';
+        flower.style.fontSize = (Math.random() * 6 + 10) + 'px';
+        flower.style.pointerEvents = 'none';
+        flower.style.zIndex = '9999';
+        flower.style.transition = 'all 1.5s ease';
+        flower.style.transform = 'translate(-50%, -50%)';
+        flower.style.opacity = '1';
+
+        document.body.appendChild(flower);
+
+        setTimeout(() => {
+          flower.style.transform = 'translate(-50%, 30px) rotate(' + (Math.random() * 30 - 15) + 'deg)';
+          flower.style.opacity = '0';
+        }, 50);
+
+        setTimeout(() => {
+          flower.remove();
+        }, 1550);
+      }
+    });
+  </script>
+</body>
+
+</html>
